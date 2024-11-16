@@ -6,7 +6,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="Remote shutdown desktop">
+        android:label="Remote Desktop Shutdown">
 
 
         <activity
