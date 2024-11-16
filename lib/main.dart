@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:remote_shutdown_desktop/Class/sendpacket.dart';
+import 'package:remote_shutdown_desktop/model/sendpacket.dart';
 import 'package:remote_shutdown_desktop/widgets/shutdown_button.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -36,11 +36,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   SendPacket sendPacket = SendPacket();
 
-  var msg = "shutdown";
+  final msg = "shutdown";
 
   final ip = "192.168.1.255";
 
-  var port = 8888;
+  final port = 8888;
 
   @override
   void initState() {
@@ -60,9 +60,9 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  var commandLineHistory = <String>[];
+  final commandLineHistory = <String>[];
 
-  var texteditingController = TextEditingController();
+  final texteditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
