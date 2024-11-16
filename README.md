@@ -19,14 +19,12 @@ Welcome to the **Remote Desktop Shutdown** Android app repository! This is a Flu
 ### Android App
 1. **Clone this repository:**
 ```bash
-    Copy code
     git clone https://github.com/your-username/remote-pc-shutdown-android.git
     cd remote-pc-shutdown-android 
 ```
 2. Open the project in your favorite Flutter IDE (e.g., Android Studio, Visual Studio Code).
 3. Run the app on an Android device or emulator:
 ```bash
-    Copy code
     flutter pub get
     flutter run
 ```
