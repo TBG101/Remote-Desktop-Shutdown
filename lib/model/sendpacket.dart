@@ -24,7 +24,8 @@ class SendPacket {
     }
   }
 
-  Future<void> sendPacket(String message, String adress, int port) async {
+  Future<void> sendPacket(String message, String adress, int port
+      ) async {
     final InternetAddress destinationAddress = InternetAddress(adress);
 
     List<int> messageBytes = utf8.encode(message);
@@ -41,10 +42,13 @@ class SendPacket {
 
   // receive packet
   Future<RawDatagramSocket> receivePacket() async {
-    return await RawDatagramSocket.bind(InternetAddress.anyIPv4, 8888);
+    return await RawDatagramSocket.bind(InternetAddress.anyIPv4, 8887);
   }
 
   void closeCmdReceiver() {
     cmdStream?.cancel();
   }
+
+
+  
 }

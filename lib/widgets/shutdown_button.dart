@@ -10,14 +10,20 @@ class ShutdownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      padding: const EdgeInsets.all(0),
-      splashColor: Color.fromARGB(255, 184, 3, 255),
-      style: ElevatedButton.styleFrom(),
-      icon: Image.asset("lib/assets/power.png"),
-      onPressed: () {
-        callback();
-      },
-    );
+    final size = MediaQuery.of(context).size;
+    return Container(
+        padding: const EdgeInsets.all(50),
+        child: Center(
+            child: SizedBox(
+                width: size.width,
+                child: IconButton(
+                  padding: const EdgeInsets.all(0),
+                  splashColor: Color.fromARGB(255, 184, 3, 255),
+                  style: ElevatedButton.styleFrom(),
+                  icon: Image.asset("lib/assets/power.png"),
+                  onPressed: () {
+                    callback();
+                  },
+                ))));
   }
 }
