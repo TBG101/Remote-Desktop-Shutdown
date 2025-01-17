@@ -42,17 +42,28 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+        <!-- Register the Widget Provider -->
         <receiver
-            android:name=".ButtonWidget"
-            android:exported="false">
+            android:name=".WidgetProvider"
+            android:exported="true"
+            android:label="Flutter Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/button_widget_info" />
         </receiver>
+
+        <!-- Register the Broadcast Receiver -->
+        <receiver android:name=".WidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.zikostudio.EXECUTE_DART_CODE"/>
+            </intent-filter>
+        </receiver>
+
+
     </application>
 
 </manifest>

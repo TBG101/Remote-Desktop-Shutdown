@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:remote_shutdown_desktop/const_values.dart';
 import 'package:remote_shutdown_desktop/model/sendpacket.dart';
 import 'package:remote_shutdown_desktop/mouse_screen.dart';
@@ -8,6 +9,17 @@ import 'package:remote_shutdown_desktop/widgets/command_line.dart';
 import 'package:remote_shutdown_desktop/widgets/my_dropdown.dart';
 import 'package:remote_shutdown_desktop/widgets/shutdown_button.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
+@pragma('vm:entry-point')
+void backgroundMain() async {
+  const platform = MethodChannel('com.zikostudio.widget/channel');
+  WidgetsFlutterBinding.ensureInitialized();
+  platform.setMethodCallHandler((call) async {
+    if (call.method == 'executeDartCode') {
+      SendPacket().sendPacket("shutdown all", "192.168.1.255", 8888);
+    }
+  });
+}
 
 void main() {
   runApp(const MyApp());
