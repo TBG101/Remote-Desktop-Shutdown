@@ -34,11 +34,12 @@ class _MouseScreenState extends State<MouseScreen> {
     sendPacket.sendPacket("mouse $hostName middle click", ip, port);
   }
 
-  void mouseMove(String hostName, Offset delta) {
+  void mouseMove(String hostName, Offset delta, double sensitivity) {
     if (hostName.isEmpty || hostName == "Broadcast") hostName = "all";
-    print("mouse move $hostName ${delta.dx} ${delta.dy}");
     sendPacket.sendPacket(
-        "mouse move $hostName ${delta.dx} ${delta.dy}", ip, port);
+        "mouse move $hostName ${delta.dx * sensitivity} ${delta.dy * sensitivity}",
+        ip,
+        port);
   }
 
   void onRightClickDown(String hostname) {
@@ -68,6 +69,9 @@ class _MouseScreenState extends State<MouseScreen> {
   }
 
   Duration? lastMove;
+  DateTime lastTap = DateTime.now();
+  bool isDragging = false;
+  bool isClickDown = false;
 
   @override
   Widget build(BuildContext context) {
@@ -85,10 +89,28 @@ class _MouseScreenState extends State<MouseScreen> {
                   children: [
                     GestureDetector(
                       onTapUp: (details) {
-                        onLeftClickUp(widget.hostName);
+                        // if (isDragging) return;
+
+                        // if (lastTap.difference(DateTime.now()).inMilliseconds <
+                        //     80) {
+                        //   onLeftClickUp(widget.hostName);
+                        //   isClickDown = false;
+                        // }
                       },
                       onTapDown: (details) {
-                        onLeftClickDown(widget.hostName);
+                        final now = DateTime.now();
+                        if (isDragging) return;
+
+                        Future.delayed(const Duration(milliseconds: 100), () {
+                          print(now.difference(lastTap).inMilliseconds);
+                          if (now.difference(lastTap).inMilliseconds < 500) {
+                            onLeftClickDown(widget.hostName);
+                            isClickDown = true;
+                          } else {
+                            onLeftClick(widget.hostName);
+                          }
+                          lastTap = DateTime.now();
+                        });
                       },
                       onLongPress: () {
                         onRightClick(widget.hostName);
@@ -97,20 +119,23 @@ class _MouseScreenState extends State<MouseScreen> {
                         lastMove = details.sourceTimeStamp;
                       },
                       onPanUpdate: (details) {
-                        if (lastMove != null) {
-                          final currentMove = details.sourceTimeStamp;
-                          final delta = currentMove! - lastMove!;
-                          print(delta);
-                          if (delta.inMilliseconds > 20) {
-                            mouseMove(widget.hostName, details.delta);
-                            lastMove = currentMove;
-                          }
+                        if (lastMove == null) return;
+                        isDragging = true;
+                        final currentMove = details.sourceTimeStamp;
+                        final delta = currentMove! - lastMove!;
+                        if (delta.inMilliseconds > 20) {
+                          mouseMove(widget.hostName, details.delta, 1.2);
+                          lastMove = currentMove;
                         }
                       },
                       onPanEnd: (details) {
                         lastMove = null;
-                        onLeftClickUp(widget.hostName);
-                        print("End");
+                        isDragging = false;
+
+                        if (isClickDown) {
+                          onLeftClickUp(widget.hostName);
+                          isClickDown = false;
+                        }
                       },
                       child: Container(
                           height: size.height - 120,
