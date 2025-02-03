@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:remote_shutdown_desktop/const_values.dart';
 import 'package:remote_shutdown_desktop/model/sendpacket.dart';
 import 'package:remote_shutdown_desktop/widgets/mouse_buttons.dart';
@@ -76,132 +77,165 @@ class _MouseScreenState extends State<MouseScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              child: SizedBox(
-                width: size.width,
-                height: size.height - 120,
+    return PopScope(
+      canPop: false,
+      child: SafeArea(
+        child: Scaffold(
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 0, top: 8, left: 10),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                      onTapUp: (details) {
-                        // if (isDragging) return;
-
-                        // if (lastTap.difference(DateTime.now()).inMilliseconds <
-                        //     80) {
-                        //   onLeftClickUp(widget.hostName);
-                        //   isClickDown = false;
-                        // }
-                      },
-                      onTapDown: (details) {
-                        final now = DateTime.now();
-                        if (isDragging) return;
-
-                        Future.delayed(const Duration(milliseconds: 100), () {
-                          print(now.difference(lastTap).inMilliseconds);
-                          if (now.difference(lastTap).inMilliseconds < 500) {
-                            onLeftClickDown(widget.hostName);
-                            isClickDown = true;
-                          } else {
-                            onLeftClick(widget.hostName);
-                          }
-                          lastTap = DateTime.now();
-                        });
-                      },
-                      onLongPress: () {
-                        onRightClick(widget.hostName);
-                      },
-                      onPanStart: (details) {
-                        lastMove = details.sourceTimeStamp;
-                      },
-                      onPanUpdate: (details) {
-                        if (lastMove == null) return;
-                        isDragging = true;
-                        final currentMove = details.sourceTimeStamp;
-                        final delta = currentMove! - lastMove!;
-                        if (delta.inMilliseconds > 20) {
-                          mouseMove(widget.hostName, details.delta, 1.2);
-                          lastMove = currentMove;
-                        }
-                      },
-                      onPanEnd: (details) {
-                        lastMove = null;
-                        isDragging = false;
-
-                        if (isClickDown) {
-                          onLeftClickUp(widget.hostName);
-                          isClickDown = false;
-                        }
-                      },
-                      child: Container(
-                          height: size.height - 120,
-                          width: size.width - 50 - 4,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[900],
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(5)),
-                            border: Border.all(
-                              color: const Color.fromARGB(111, 255, 255, 255),
-                              width: 1,
-                            ),
-                          ),
-                          child: const SizedBox.shrink()),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onVerticalDragUpdate: (details) {
-                          if (details.primaryDelta == null) return;
-
-                          if (details.primaryDelta! > 0) {
-                            scroll(widget.hostName, -1);
-                          } else {
-                            scroll(widget.hostName, 1);
-                          }
+                    SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: IconButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.grey[800]),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                            )),
+                        onPressed: () {
+                          Navigator.pop(context);
                         },
-                        child: Container(
-                          height: size.height - 120,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[800],
-                            border: Border.all(
-                              color: const Color.fromARGB(111, 255, 255, 255),
-                              width: 1,
-                            ),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(5)),
-                          ),
-                          margin: const EdgeInsets.only(left: 5),
-                        ),
+                        icon: const Icon(Icons.arrow_back_ios_new_rounded),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: MouseButtonWidget(
-                        onTapDown: () => onLeftClickDown(widget.hostName),
-                        onTapUp: () => onLeftClickUp(widget.hostName)),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                child: SizedBox(
+                  width: size.width,
+                  height: size.height - 120 - 42 - 8 * 2,
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTapUp: (details) {
+                          // if (isDragging) return;
+
+                          // if (lastTap.difference(DateTime.now()).inMilliseconds <
+                          //     80) {
+                          //   onLeftClickUp(widget.hostName);
+                          //   isClickDown = false;
+                          // }
+                        },
+                        onTapDown: (details) {
+                          final now = DateTime.now();
+                          if (isDragging) return;
+
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            print(now.difference(lastTap).inMilliseconds);
+                            if (now.difference(lastTap).inMilliseconds < 500) {
+                              onLeftClickDown(widget.hostName);
+                              isClickDown = true;
+                            } else {
+                              onLeftClick(widget.hostName);
+                            }
+                            lastTap = DateTime.now();
+                          });
+                        },
+                        onLongPress: () {
+                          onRightClick(widget.hostName);
+                        },
+                        onPanStart: (details) {
+                          lastMove = details.sourceTimeStamp;
+                        },
+                        onPanUpdate: (details) {
+                          if (lastMove == null) return;
+                          isDragging = true;
+                          final currentMove = details.sourceTimeStamp;
+                          final delta = currentMove! - lastMove!;
+                          if (delta.inMilliseconds > 20) {
+                            mouseMove(widget.hostName, details.delta, 1.2);
+                            lastMove = currentMove;
+                          }
+                        },
+                        onPanEnd: (details) {
+                          lastMove = null;
+                          isDragging = false;
+
+                          if (isClickDown) {
+                            onLeftClickUp(widget.hostName);
+                            isClickDown = false;
+                          }
+                        },
+                        child: Container(
+                            height: size.height - 120,
+                            width: size.width - 50 - 4,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[900],
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5)),
+                              border: Border.all(
+                                color: const Color.fromARGB(111, 255, 255, 255),
+                                width: 1,
+                              ),
+                            ),
+                            child: const SizedBox.shrink()),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onVerticalDragUpdate: (details) {
+                            if (details.primaryDelta == null) return;
+
+                            if (details.primaryDelta! > 0) {
+                              scroll(widget.hostName, -1);
+                            } else {
+                              scroll(widget.hostName, 1);
+                            }
+                          },
+                          child: Container(
+                            height: size.height - 120,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[800],
+                              border: Border.all(
+                                color: const Color.fromARGB(111, 255, 255, 255),
+                                width: 1,
+                              ),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5)),
+                            ),
+                            margin: const EdgeInsets.only(left: 5),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  MouseButtonWidget(
-                      width: 44, onTap: () => onMiddleClick(widget.hostName)),
-                  Expanded(
-                      child: MouseButtonWidget(
-                    onTap: () => onRightClick(widget.hostName),
-                  )),
-                ],
+                ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: MouseButtonWidget(
+                          onTapDown: () => onLeftClickDown(widget.hostName),
+                          onTapUp: () => onLeftClickUp(widget.hostName)),
+                    ),
+                    MouseButtonWidget(
+                        width: 44, onTap: () => onMiddleClick(widget.hostName)),
+                    Expanded(
+                        child: MouseButtonWidget(
+                      onTap: () => onRightClick(widget.hostName),
+                    )),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
