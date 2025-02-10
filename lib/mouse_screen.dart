@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:remote_shutdown_desktop/const_values.dart';
 import 'package:remote_shutdown_desktop/model/sendpacket.dart';
 import 'package:remote_shutdown_desktop/widgets/mouse_buttons.dart';
@@ -69,6 +68,21 @@ class _MouseScreenState extends State<MouseScreen> {
     sendPacket.sendPacket("mouse $hostname scroll $delta", ip, port);
   }
 
+  void onMute(String hostname) {
+    if (hostname.isEmpty || hostname == "Broadcast") hostname = "all";
+    sendPacket.sendPacket("sound mute", ip, port);
+  }
+
+  void onVolumeDown(String hostname) {
+    if (hostname.isEmpty || hostname == "Broadcast") hostname = "all";
+    sendPacket.sendPacket("sound volume down", ip, port);
+  }
+
+  void onVolumeUp(String hostname) {
+    if (hostname.isEmpty || hostname == "Broadcast") hostname = "all";
+    sendPacket.sendPacket("sound volume up", ip, port);
+  }
+
   Duration? lastMove;
   DateTime lastTap = DateTime.now();
   bool isDragging = false;
@@ -84,31 +98,22 @@ class _MouseScreenState extends State<MouseScreen> {
           body: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 0, top: 8, left: 10),
+                padding: const EdgeInsets.only(
+                    bottom: 0, top: 8, left: 10, right: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: IconButton(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.grey[800]),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            )),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                      ),
-                    ),
+                    _buildSmallButton(() => Navigator.pop(context),
+                        Icons.arrow_back_ios_new_rounded),
+                    const Spacer(),
+                    _buildSmallButton(() => onMute(widget.hostName),
+                        Icons.volume_off_rounded),
+                    _buildSmallButton(() => onVolumeDown(widget.hostName),
+                        Icons.volume_down_rounded),
+                    _buildSmallButton(() => onVolumeUp(widget.hostName),
+                        Icons.volume_up_rounded),
+                    _buildSmallButton(() => {}, Icons.keyboard_alt_rounded),
                   ],
                 ),
               ),
@@ -236,6 +241,27 @@ class _MouseScreenState extends State<MouseScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSmallButton(void Function() onPressed, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 4),
+      child: SizedBox(
+        height: 50,
+        width: 50,
+        child: IconButton(
+          style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all(Colors.grey[800]),
+              shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+              )),
+          onPressed: onPressed,
+          icon: Icon(icon),
         ),
       ),
     );

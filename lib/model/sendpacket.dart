@@ -24,8 +24,7 @@ class SendPacket {
     }
   }
 
-  Future<void> sendPacket(String message, String adress, int port
-      ) async {
+  Future<void> sendPacket(String message, String adress, int port) async {
     final InternetAddress destinationAddress = InternetAddress(adress);
 
     List<int> messageBytes = utf8.encode(message);
@@ -48,7 +47,4 @@ class SendPacket {
   void closeCmdReceiver() {
     cmdStream?.cancel();
   }
-
-
-  
 }
