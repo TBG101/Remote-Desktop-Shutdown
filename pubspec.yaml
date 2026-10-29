@@ -16,7 +16,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.1
 
 environment:
   sdk: ">=3.1.5 <4.0.0"
@@ -34,8 +34,9 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  carousel_slider: ^5.0.0
-
+  udp: ^5.0.3
+  msgpack_dart: ^1.0.1
+  nsd: ^4.0.0  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -46,7 +47,16 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  change_app_package_name: ^1.4.0
+  flutter_launcher_icons: "^0.14.4"
+
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "lib/assets/icon/icon.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "lib/assets/icon/icon.png"
+  adaptive_icon_foreground_inset: 26
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -60,7 +70,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/assets/power.png
+    # - lib/assets/power.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
